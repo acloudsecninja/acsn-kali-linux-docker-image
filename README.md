@@ -3,28 +3,28 @@ A Cloud Security Ninja LLC
 - Kali Linux Docker Image
 
 
-- Run the following command to get kali linux to work with a GUI in docker. vnc server will prompt you to set up a password so make sure to remember it.
+- Run the following command to get kali linux to work via the CLI in docker and from your windows machine via ssh / putty.
 
-
-1. Build and name the docker image.
+1. Run this command below
 ```bash
-docker build -t kali .
+docker system prune --all --force
 ```
 
-2. Create the network so It can be on your physical network.
-
+2. Build the image.
 ```bash
-docker network create --driver bridge my_bridge_network
+docker-compose up --build
 ```
 
-3. Run the container with the bridge network setup and configuration.
+3. Access the kali linx container via your local physical machine.
 
 ```bash
-docker run -d --network mydockernetwork-emu --ip 192.168.1.100 -p 5900:5900 -p 8080:8080 kali
-
+docker exec -it kali_container /bin/bash
 ```
 
+4. The other option is to get to the kali linux system via the windows machine you created earlier.
 
-* For Testing only. Do not use in production Environments.
+
+
+* For Testing only. Do not use in production environments.
 
 Created and Maintained by - A Cloud Security Ninja LLC

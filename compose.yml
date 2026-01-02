@@ -5,15 +5,13 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    ports:
-      - "5900:5900"  # VNC Port
-      - "8080:8080"  # noVNC Port
+    container_name: kali_container
+    tty: true
+    volumes:
+      - ./data:/data  # Mount a local directory to persist data
     networks:
-      my_network:
-        ipv4_address: 10.10.10.110  # Specify a static IP address within the subnet
+      - kali_net
 
 networks:
-  my_network:
-    external: true  # Use an external network
-    driver: bridge  # Set the network driver to bridge
-    name: mydockernetwork-emu  # The name of the macvlan network you created
+  kali_net:
+    driver: bridge
