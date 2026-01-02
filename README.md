@@ -8,18 +8,22 @@ A Cloud Security Ninja LLC
 
 1. Build and name the docker image.
 ```bash
-docker build -t kalilinux-ui .
+docker build -t kali .
 ```
 
-2. Create the network required for this to work properly.
+2. Create the network so It can be on your physical network.
+
 ```bash
-docker network create --subnet=172.30.0.0/24 kali_net
+docker network create --driver bridge my_bridge_network
 ```
 
-2. Run the named docker image and give it a port to use.
+3. Run the container with the bridge network setup and configuration.
+
 ```bash
-docker run -d -p 5901:5901 --name acsn-kali-linux-docker-image --net kali_net --ip 172.30.0.5 kalilinux-ui
+docker run -d --network mydockernetwork-emu --ip 192.168.1.100 -p 5900:5900 -p 8080:8080 kali
+
 ```
+
 
 * For Testing only. Do not use in production Environments.
 

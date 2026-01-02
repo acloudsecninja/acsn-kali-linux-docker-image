@@ -1,21 +1,19 @@
 version: '3.8'
 
 services:
-  kali-ui:
-    image: kalilinux/kali-rolling
+  kali:
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "5901" # This will expose the port to the host
-    command: ["/start.sh"]
+      - "5900:5900"  # VNC Port
+      - "8080:8080"  # noVNC Port
     networks:
-      kali_net:
-        ipv4_address: 172.30.0.5 # Specify a fixed IP if needed or let Docker assign one
+      my_network:
+        ipv4_address: 10.10.10.110  # Specify a static IP address within the subnet
 
 networks:
-  kali_net:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.30.0.0/24 # Custom subnet
+  my_network:
+    external: true  # Use an external network
+    driver: bridge  # Set the network driver to bridge
+    name: mydockernetwork-emu  # The name of the macvlan network you created

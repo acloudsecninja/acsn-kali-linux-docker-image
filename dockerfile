@@ -1,16 +1,27 @@
+# Use the official Kali Linux base image
 FROM kalilinux/kali-rolling
 
-# Update and install necessary packages
-RUN apt-get update && \
-    apt-get install -y xfce4 xfce4-terminal tightvncserver git python3 python3-pip websockify && \
-    apt-get clean
+# Install necessary packages
+RUN apt-get update && apt-get install -y \
+    xfce4 \
+    xfce4-terminal \
+    xvfb \
+    x11vnc \
+    novnc \
+    tigervnc-standalone-server \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Clone noVNC and websockify
-RUN git clone https://github.com/novnc/noVNC.git /noVNC && \
-    git clone https://github.com/novnc/websockify.git /noVNC/utils/websockify
+# Set a password for VNC
+RUN mkdir ~/.vnc && \
+    echo "your_password" | vncpasswd -f > ~/.vnc/passwd && \
+    chmod 600 ~/.vnc/passwd
 
-# Add the startup script
-COPY start.sh /start.sh
-RUN chmod +x /start.sh
+# Expose the VNC port and noVNC port
+EXPOSE 5900 8080
 
-CMD ["/start.sh"]
+# Add an entrypoint script
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+# Set the entrypoint
+ENTRYPOINT ["/entrypoint.sh"]
