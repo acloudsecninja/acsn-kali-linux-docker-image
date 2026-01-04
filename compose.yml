@@ -1,17 +1,19 @@
-version: '3.8'
-
-services:
-  kali:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: kali_container
-    tty: true
+services:  
+  windows:
+    image: dockurr/windows
+    container_name: kali-linux-windows
+    environment:
+      VERSION: "10"
+    devices:
+      - /dev/kvm
+      - /dev/net/tun
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - 8007:8007
+      - 8001:3389/tcp    # Mapping external port 8001 to internal port 3389
+      - 8001:3389/udp
     volumes:
-      - ./data:/data  # Mount a local directory to persist data
-    networks:
-      - kali_net
-
-networks:
-  kali_net:
-    driver: bridge
+      - ./windows:/storage
+    restart: always
+    stop_grace_period: 2m
