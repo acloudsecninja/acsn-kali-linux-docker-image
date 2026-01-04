@@ -2,6 +2,8 @@ version: '3.8'
 
 services:
   kali:
+    cap_add:
+      - NET_ADMIN
     build: .
     container_name: kali_container
     tty: true
@@ -9,3 +11,14 @@ services:
       - ./data:/data  # Optional: Mount a data volume
     ports:
       - "2222:22"      # Optional: Expose SSH on port 2222
+    networks:
+      custom_net:
+        ipv4_address: 172.31.0.5  # Assign a specific IP within the network
+
+networks:
+  custom_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.31.0.0/24
+          gateway: 172.31.0.1
